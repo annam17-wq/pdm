@@ -2,6 +2,7 @@ package com.example.myapp;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -9,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,9 +28,18 @@ public class MainActivity extends AppCompatActivity {
         });
     Button b = findViewById(R.id.button);
     TextView tv = findViewById(R.id.textView);
+
+        EditText edmin = findViewById(R.id.edmin);
+        EditText edmax = findViewById(R.id.edmax);
+
         b.setOnClickListener(view -> {
-        contador++;
-        tv.setText(Integer.toString(contador));
+            int min = Integer.parseInt(edmin.getText().toString());
+            int max = Integer.parseInt(edmax.getText().toString());
+
+        Random random = new Random();
+        int valor = random.nextInt();
+        tv.setText(Integer.toString((valor)));
         });
+
     }
 }
