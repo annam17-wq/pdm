@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
             int r = (random.nextInt(max-min))+min;
             tv.setText(Integer.toString(r));
-            Intent intent = new Intent(MainActivity.this, MainActivity2.class);
+            Intent intent = new Intent(MainActivity.this, IMC.class);
 
             intent.putExtra("Valor", r);
 
