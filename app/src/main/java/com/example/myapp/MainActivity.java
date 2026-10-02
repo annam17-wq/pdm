@@ -37,8 +37,8 @@ String nomes[] = new String[]{"Docinho52","Robson", "João", "Julia", "Kiara",
                 R.layout.listaitens, R.id.textView, nomes);
         listanomes.setAdapter(usb);
         listanomes.setOnItemClickListener((adapterView, view, position, id) -> {
-        Toast.makeText(getApplicationContext()nomes[position], Toast.LENGTH_LONG).show();
-    });
+            Toast.makeText(getApplicationContext()nomes[position], Toast.LENGTH_LONG).show();
+        });
 
-
+    }
 }
