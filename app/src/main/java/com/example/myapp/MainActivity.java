@@ -2,9 +2,14 @@ package com.example.myapp;
 
 
 import android.os.Bundle;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -15,7 +20,8 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    int contador=0;
+String nomes[] = new String[]{"Docinho52","Robson", "João", "Julia", "Kiara",
+        "Brian", "Marcelo", "Boos", "Benica"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,42 +32,13 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        EditText edMin, edMax;
-        edMin = findViewById(R.id.edMin);
-        edMax = findViewById(R.id.edMax);
-
-        TextView tv = findViewById(R.id.textView);
-        Button b = findViewById(R.id.ButtonSortear);
-
-        b.setOnClickListener( v -> {
-            Random random = new Random();
-
-            String smin = edMin.getText().toString();
-            String smax = edMax.getText().toString();
-            if (smin.trim().equals("")){
-                edMin.setError("Informe um valor");
-                edMin.requestFocus();
-                return;
-            }
-            if (smax.trim().equals("")){
-                edMax.setError("Informe um valor");
-                edMax.requestFocus();
-                return;
-            }
-
-            int min = Integer.parseInt(edMin.getText().toString());
-            int max = Integer.parseInt(edMax.getText().toString());
-            if (min>=max){
-                edMax.setError("Valor máximo deve ser maior que o mínimo");
-                return;
-            }
-
-
-
-            int r = (random.nextInt(max-min))+min;
-            tv.setText(Integer.toString(r));
-        });
-    };
+        ListView listanomes = findViewById(R.id.listView);
+        ArrayAdapter<String> usb = new ArrayAdapter<>(getApplicationContext(),
+                R.layout.listaitens, R.id.textView, nomes);
+        listanomes.setAdapter(usb);
+        listanomes.setOnItemClickListener((adapterView, view, position, id) -> {
+        Toast.makeText(getApplicationContext()nomes[position], Toast.LENGTH_LONG).show();
+    });
 
 
 }
