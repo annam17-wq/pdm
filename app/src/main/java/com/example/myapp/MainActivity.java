@@ -1,62 +1,61 @@
 package com.example.myapp;
 
+
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+SQLiteDatabase database; //declara uma variável do tipo SQLiteDatabase
+    EditText editText;
 
-    private DatabaseHelper dbHelper;
-    private List<Nota> listaNotas;
-    private ArrayAdapter<Nota> adapter;
-    private ListView listView;
-    private EditText ed;
-
+    Button button;
+    ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+        database = openOrCreateDatabase("notinhas", MODE_PRIVATE, null);
+        database.execSQL("CREATE TABLE IF NOT EXISTS notas (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                " titulo VARCHAR," +
+                 "conteudo VARCHAR)");
         setContentView(R.layout.activity_main);
+        editText = findViewById(R.id.edtext);
+        button = findViewById(R.id.button);
+        listView = findViewById(R.id.listview);
 
-        dbHelper = new DatabaseHelper(this);
-        listaNotas = dbHelper.obterTodasNotas();
+        button.setOnClickListener(v -> {
+            String titulo = editText.getText().toString();
+            ContentValues values = new ContentValues();
+            values.put("titulo", titulo);
+           int id=(int) database.insert("notinhas", null, values);
+           if (id>0) {
+               Toast.makeText(getApplicationContext(),
+                       "Nota salva com sucesso", Toast.LENGTH_SHORT).show();
+           }
 
-        listView = findViewById(R.id.listView);
-        ed = findViewById(R.id.ed);
-        Button btnAdicionar = findViewById(R.id.b);
-
-        adapter = new ArrayAdapter<>(this, R.layout.listaitens, R.id.textView, listaNotas);
-        listView.setAdapter(adapter);
-
-        btnAdicionar.setOnClickListener(view -> {
-            String textoDigitado = ed.getText().toString().trim();
-            if (!textoDigitado.isEmpty()) {
-                String titulo = "Nota " + (listaNotas.size() + 1);
-                long result = dbHelper.inserirNota(titulo, textoDigitado);
-                if (result != -1) {
-                    atualizarLista();
-                    ed.setText("");
-                    Toast.makeText(getApplicationContext(), "Nota inserida com sucesso!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Erro ao inserir nota", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(getApplicationContext(), "Digite o texto da nota", Toast.LENGTH_SHORT).show();
-            }
+           else {
+               Toast.makeText(getApplicationContext(),
+                       "Erro ao salvar nota", Toast.LENGTH_SHORT).show();
+           }
         });
     }
 
-    private void atualizarLista() {
-        listaNotas.clear();
-        listaNotas.addAll(dbHelper.obterTodasNotas());
-        adapter.notifyDataSetChanged();
+    public void listarNotas(){
+     Cursor c =   database.rawQuery("SELECT * FROM notas LIMIT ?", new String[]{"100"});
     }
+
+
 }
